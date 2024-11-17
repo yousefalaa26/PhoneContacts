@@ -102,6 +102,7 @@ public class PhoneContacts {
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
                 Contacts[index].node = null;
+                size--;
                 System.out.println("Contact removed");
                 return;
             }
