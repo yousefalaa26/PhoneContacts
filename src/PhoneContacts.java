@@ -9,16 +9,16 @@ public class PhoneContacts {
         this.size=0;
     }
 
-    private static class HashNode{
+     static class HashNode{
         Node node;
-        boolean occupiedBefore;
+        private boolean occupiedBefore;
 
         HashNode(String name, String phone){
             this.node = new Node(name, phone);
             this.occupiedBefore= true;
         }
 
-        private static class Node{
+        static class Node{
             String name;
             String phone;
 
@@ -71,11 +71,10 @@ public class PhoneContacts {
         System.out.println("Contact inserted successfully");
     }
 
-
-    void search(String name){
+    HashNode.Node search(String name){
         if (isEmpty()){
             System.out.println("Contacts are empty");
-            return;
+            return null;
         }
 
         int index=(int)hash(name);
@@ -83,12 +82,11 @@ public class PhoneContacts {
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
                 System.out.println("found at index: "+index);
-                System.out.println("Phone: " + Contacts[index].node.phone);
-                return;
+                return new HashNode.Node(name, Contacts[index].node.phone);
             }
             index=(index +1) % capacity;
         }
-        System.out.println("Contact not found");
+        return null;
     }
 
     public void remove(String name){
@@ -110,6 +108,7 @@ public class PhoneContacts {
         }
         System.out.println("Contact not found");
     }
+
     public void update(String name, String newPhone){
         if (isEmpty()){
             System.out.println("Contacts are empty");

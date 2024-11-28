@@ -33,7 +33,12 @@ public class Main {
                 case 2:
                     System.out.println("Enter the name for search:");
                     name = input.next();
-                    list.search(name);
+                    try{
+                        PhoneContacts.HashNode.Node node = list.search(name);
+                        System.out.println("Phone: "+node.phone);
+                    } catch (Exception e) {
+                        System.out.println("Contact not found");
+                    }
                     break;
                 case 3:
                     System.out.println("Enter the name for delete:");
