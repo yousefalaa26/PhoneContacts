@@ -57,6 +57,7 @@ public class PhoneContacts {
     }
 
     public void insert(String name, String phone){
+        int counter = 0;
         if (isFull()){
             System.out.println("Cannot insert "+name+", contacts are full");
             return;
@@ -64,7 +65,8 @@ public class PhoneContacts {
         int index = (int)hash(name);
 
         while(Contacts[index] != null && Contacts[index].node != null){
-            index=(index +1) % capacity;
+            counter++;
+            index= (int) ((index + Math.pow(counter, 2)) % capacity);
         }
         Contacts[index]= new HashNode(name, phone);
         size++;
