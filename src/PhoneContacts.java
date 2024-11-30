@@ -35,7 +35,7 @@ public class PhoneContacts {
     private boolean isEmpty(){
         return size == 0;
     }
-    public int size(){
+    private int size(){
         return size;
     }
 
@@ -80,13 +80,15 @@ public class PhoneContacts {
         }
 
         int index=(int)hash(name);
+        int counter = 0;
 
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
                 System.out.println("found at index: "+index);
                 return new HashNode.Node(name, Contacts[index].node.phone);
             }
-            index=(index +1) % capacity;
+            counter++;
+            index= (int) ((index + Math.pow(counter, 2)) % capacity);
         }
         return null;
     }
@@ -98,6 +100,7 @@ public class PhoneContacts {
         }
 
         int index=(int)hash(name);
+        int counter =0;
 
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
@@ -106,7 +109,7 @@ public class PhoneContacts {
                 System.out.println("Contact removed");
                 return;
             }
-            index=(index +1) % capacity;
+            index= (int) ((index + Math.pow(counter, 2)) % capacity);
         }
         System.out.println("Contact not found");
     }
@@ -118,6 +121,7 @@ public class PhoneContacts {
         }
 
         int index=(int)hash(name);
+        int counter =0;
 
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
@@ -126,7 +130,7 @@ public class PhoneContacts {
                 System.out.println("Contact updated from "+oldPhone+" to "+newPhone);
                 return;
             }
-            index=(index +1) % capacity;
+            index= (int) ((index + Math.pow(counter, 2)) % capacity);
         }
         System.out.println("Contact not found");
     }
@@ -145,5 +149,6 @@ public class PhoneContacts {
             } catch (NullPointerException e) {
             }
         }
+        System.out.println("You have "+size()+" Contacts");
     }
 }
