@@ -34,8 +34,8 @@ public class Main {
                     System.out.println("Enter the name for search:");
                     name = input.next();
                     try{
-                        PhoneContacts.HashNode.Node node = list.search(name);
-                        System.out.println("Phone: "+node.phone);
+                        PhoneContacts.HashNode node = list.search(name);
+                        System.out.println("Phone: "+node.node.phone);
                     } catch (Exception e) {
                         System.out.println("Contact not found");
                     }

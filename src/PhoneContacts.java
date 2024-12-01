@@ -61,13 +61,11 @@ public class PhoneContacts {
             System.out.println("Cannot insert "+name+", contacts are full");
             return;
         }
-        try{
-            HashNode.Node node = search(name); // if the contact already in the table
-            if(name.equals(node.name)){
-                System.out.println("Contact is already inserted");
-                return;
-            }
-        } catch (Exception e){}
+        HashNode node = search(name); // if the contact already in the table
+        if(name.equals(node.node.name)) {
+            System.out.println("Contact is already inserted");
+            return;
+        }
 
         int counter = 0;
         int index = (int)hash(name);
@@ -81,7 +79,7 @@ public class PhoneContacts {
         System.out.println("Contact inserted successfully");
     }
 
-    HashNode.Node search(String name){
+    HashNode search(String name){
         if (isEmpty())
             return null;
 
@@ -91,7 +89,7 @@ public class PhoneContacts {
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
                 System.out.println("found at index: "+index);
-                return new HashNode.Node(name, Contacts[index].node.phone); // returns an object of the contact
+                return Contacts[index]; // returns the contact
             }
             counter++;
             index= (int) ((index + Math.pow(counter, 2)) % capacity);
@@ -100,45 +98,31 @@ public class PhoneContacts {
     }
 
     public void remove(String name){
-        if (isEmpty()){
-            System.out.println("Contacts are empty");
+        HashNode node = search(name);
+
+        if(node == null){
+            System.out.println("Contact not found");
             return;
         }
 
-        int index=(int)hash(name);
-        int counter =0;
-
-        while(Contacts[index] != null && Contacts[index].node != null){
-            if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
-                Contacts[index].node = null;
-                size--;
-                System.out.println("Contact removed");
-                return;
-            }
-            index= (int) ((index + Math.pow(counter, 2)) % capacity);
-        }
-        System.out.println("Contact not found");
+        node.node = null;
+        size--;
+        System.out.println("Contact removed");
     }
 
     public void update(String name, String newPhone){
-        if (isEmpty()){
-            System.out.println("Contacts are empty");
+        HashNode node = search(name);
+
+        if(node == null){
+            System.out.println("Contact not found");
             return;
         }
 
-        int index=(int)hash(name);
-        int counter =0;
+        String oldPhone =node.node.phone;
+        node.node.phone = newPhone;
 
-        while(Contacts[index] != null && Contacts[index].node != null){
-            if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
-                String oldPhone = Contacts[index].node.phone;
-                Contacts[index].node.phone = newPhone;
-                System.out.println("Contact updated from "+oldPhone+" to "+newPhone);
-                return;
-            }
-            index= (int) ((index + Math.pow(counter, 2)) % capacity);
-        }
-        System.out.println("Contact not found");
+        System.out.println("Contact updated from "+oldPhone+" to "+newPhone);
+
     }
 
     void display(){
@@ -148,11 +132,11 @@ public class PhoneContacts {
         }
 
         for(int i=0; i<capacity; i++){
-            try {
+            if (Contacts[i] != null && Contacts[i].node != null) {
                 System.out.println("Name: "+Contacts[i].node.name+", Phone: "+Contacts[i].node.phone);
                 System.out.println("At index: "+i);
                 System.out.println("----------------------------------");
-            } catch (NullPointerException e) {}
+            }
         }
         System.out.println("You have "+size()+" Contacts");
     }
