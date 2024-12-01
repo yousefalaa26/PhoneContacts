@@ -1,6 +1,6 @@
 public class PhoneContacts {
-    private final int capacity;
-    private int size;
+    private final int capacity; // the size of the table
+    private int size; //amount of contacts
     private final HashNode[] Contacts;
 
     PhoneContacts(int capacity){
@@ -11,7 +11,7 @@ public class PhoneContacts {
 
      static class HashNode{
         Node node;
-        private boolean occupiedBefore;
+        private final boolean occupiedBefore;
 
         HashNode(String name, String phone){
             this.node = new Node(name, phone);
@@ -57,16 +57,24 @@ public class PhoneContacts {
     }
 
     public void insert(String name, String phone){
-        int counter = 0;
-        if (isFull()){
+        if (isFull()){ // if the table full
             System.out.println("Cannot insert "+name+", contacts are full");
             return;
         }
+        try{
+            HashNode.Node node = search(name); // if the contact already in the table
+            if(name.equals(node.name)){
+                System.out.println("Contact is already inserted");
+                return;
+            }
+        } catch (Exception e){}
+
+        int counter = 0;
         int index = (int)hash(name);
 
         while(Contacts[index] != null && Contacts[index].node != null){
             counter++;
-            index= (int) ((index + Math.pow(counter, 2)) % capacity);
+            index= (int) ((index + Math.pow(counter, 2)) % capacity); // quadratic probing
         }
         Contacts[index]= new HashNode(name, phone);
         size++;
@@ -74,10 +82,8 @@ public class PhoneContacts {
     }
 
     HashNode.Node search(String name){
-        if (isEmpty()){
-            System.out.println("Contacts are empty");
+        if (isEmpty())
             return null;
-        }
 
         int index=(int)hash(name);
         int counter = 0;
@@ -85,7 +91,7 @@ public class PhoneContacts {
         while(Contacts[index] != null && Contacts[index].node != null){
             if(Contacts[index].node.name.equalsIgnoreCase(name) && Contacts[index].occupiedBefore) {
                 System.out.println("found at index: "+index);
-                return new HashNode.Node(name, Contacts[index].node.phone);
+                return new HashNode.Node(name, Contacts[index].node.phone); // returns an object of the contact
             }
             counter++;
             index= (int) ((index + Math.pow(counter, 2)) % capacity);
@@ -146,8 +152,7 @@ public class PhoneContacts {
                 System.out.println("Name: "+Contacts[i].node.name+", Phone: "+Contacts[i].node.phone);
                 System.out.println("At index: "+i);
                 System.out.println("----------------------------------");
-            } catch (NullPointerException e) {
-            }
+            } catch (NullPointerException e) {}
         }
         System.out.println("You have "+size()+" Contacts");
     }
