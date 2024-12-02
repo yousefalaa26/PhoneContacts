@@ -61,10 +61,13 @@ public class PhoneContacts {
             System.out.println("Cannot insert "+name+", contacts are full");
             return;
         }
-        HashNode node = search(name); // if the contact already in the table
-        if(name.equals(node.node.name)) {
-            System.out.println("Contact is already inserted");
-            return;
+        try {
+            HashNode node = search(name); // if the contact already in the table
+            if (name.equals(node.node.name)) {
+                System.out.println("Contact is already inserted");
+                return;
+            }
+        } catch (RuntimeException e) {
         }
 
         int counter = 0;
